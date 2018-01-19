@@ -75,8 +75,9 @@ done
 
 echo "*****************************************************************"
 echo ""
-echo " Summary:"
-echo "=========="
+echo "Summary:"
+echo ""
+echo "ctest $1"
 echo ""
 echo "Master:"
 cat $ODIR/master.summary.out
