@@ -11,7 +11,7 @@ IPS=15
 
 echo "Preparing Simulation Folder"
 echo "==========================="
-SIMD=$ROOT/$NAME.$(date +%Y%m%d-%H%M%S)
+SIMD=$ROOT/$NAME-$(date +%Y.%m.%d-%H.%M)
 SIXR=$HOME/Code/SixTrack
 MADR=$HOME/Code/MadX
 CURR=$(pwd)
@@ -40,6 +40,6 @@ cp MadX/fc.2 ./fort.2
 $CURR/setupFort2.py fort.2 $IPS
 mv -v fort.2 fort.2.orig
 mv -v fort.2.mod fort.2
-cp $CURR/fort.3 fort.3
+cp -v $CURR/fort.3 fort.3
 echo ""
 
