@@ -1,16 +1,45 @@
 #!/bin/bash
 
+# Settings
 ROOT=/scratch/SixTrack
 NAME=ScatterOne
-EXEC=SixTrack.e
+SIXT=SixTrack.e
+MADX=MadX.e
+IPS=15
 
-if [ -d $ROOT/ScatterOne ]; then
-    mv -v $ROOT/ScatterOne $ROOT/ScatterOne.$(date +%Y%m%d-%H%M%S)
-fi
+# ================================================================================================ #
 
+echo "Preparing Simulation Folder"
+echo "==========================="
+SIMD=$ROOT/$NAME.$(date +%Y%m%d-%H%M%S)
+SIXR=$HOME/Code/SixTrack
+MADR=$HOME/Code/MadX
 CURR=$(pwd)
-mkdir -pv $ROOT/$NAME
-cd $ROOT/$NAME
 
-cp $HOME/Code/SixTrack/$EXEC .
+mkdir -pv $SIMD
+mkdir -pv $SIMD/MadX
+cd $SIMD
+
+ln -s $SIXR/$SIXT $SIXT
+ln -s $MADR/$MADX MadX/$MADX
+ln -s $CURR/makeOptics.madx MadX/makeOptics.madx
+echo ""
+
+echo "Running MadX"
+echo "============"
+cd $SIMD/MadX
+./$MADX makeOptics.madx > madx.log
+tail -n3 madx.log
+cat checkValues.txt
+echo ""
+
+echo "Prepare SixTrack Inputs"
+echo "======================="
+cd $SIMD
+cp MadX/fc.2 ./fort.2
+$CURR/setupFort2.py fort.2 $IPS
+mv -v fort.2 fort.2.orig
+mv -v fort.2.mod fort.2
+cp $CURR/fort.3 fort.3
+echo ""
 

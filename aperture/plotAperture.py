@@ -4,10 +4,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 
-from sttools import TableFS, logger
+from sttools import TableFS, Aperture, logger
 from os      import path
 from array   import array
 from numpy   import ma
+
+def plotApertureTest(aperFile, pltBlock=False):
+    
+    aperData = Aperture(aperFile)
+    aperData.parseAperture()
+    
+    return
 
 def plotAperture(aperFile, pltBlock=False):
     
@@ -87,7 +94,7 @@ def plotAperture(aperFile, pltBlock=False):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        plotAperture(sys.argv[1],True)
+        plotApertureTest(sys.argv[1],True)
     else:
         logger.error("File name missing")
     
