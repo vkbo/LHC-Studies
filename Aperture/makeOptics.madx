@@ -145,7 +145,7 @@ init_alfx  = table(twiss,IP3,alfx); init_alfy  = table(twiss,IP3,alfy);
 init_betx  = table(twiss,IP3,betx); init_bety  = table(twiss,IP3,bety);
 init_dx    = table(twiss,IP3,dx);   init_dy    = table(twiss,IP3,dy);
 init_dpx   = table(twiss,IP3,dpx);  init_dpy   = table(twiss,IP3,dpy);
-
+true
 value, tune_qxb1,  tune_qyb1;
 value, tune_dqxb1, tune_dqyb1;
 value, init_alfx,  init_alfy;
@@ -180,4 +180,4 @@ value, qxb1_check, qyb1_check, dqxb1_check, dqyb1_check;
 value, alfx_3, betx_3, dx_3, dpx_3;
 value, alfy_3, bety_3, dy_3, dpy_3;
 
-sixtrack, cavall, radius = 0.017;
+sixtrack, cavall, radius = 0.017, aperture;
