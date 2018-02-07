@@ -3,8 +3,8 @@ is_thin = 1;
 option, warn, info;
 
 ! Folders
-system, "ln -fns /afs/cern.ch/eng/lhc/optics/runII/2015 db5";
-system, "ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.2  slhc";
+system, "ln -fvns /afs/cern.ch/eng/lhc/optics/runII/2015 db5";
+system, "ln -fvns /afs/cern.ch/eng/lhc/optics/HLLHCV1.2  slhc";
 
 ! Sequence definition
 option, -echo, warn, -info;

@@ -37,7 +37,7 @@ def prepareFort2(fileName, scatterPoint):
                     if theLine[0:4] == "ip%s " % scatterPoint[p]:
                         bufSingle += "ip%s_scatter       40   0.0  0.0  0.0  0.0  0.0  0.0\n" % scatterPoint[p]
                         print(" > Adding ip%s_scatter" % scatterPoint[p])
-                bufSingle += theLine
+                bufSingle += theLine.replace("_AP   3   1.000000000e-08","_AP   0   0.000000000e+00")
             elif whatStage == 2:
                 bufBlock  += theLine
             elif whatStage == 3:
