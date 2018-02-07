@@ -6,8 +6,9 @@ NAME=HL-LHC.Optics
 MADX=MadX.e
 
 echo ""
-echo "Setup Script for HL-LHC Optics Fix"
-echo "=================================="
+echo "**************************************"
+echo "* Setup Script for HL-LHC Optics Fix *"
+echo "**************************************"
 
 # ================================================================================================ #
 echo ""
@@ -17,7 +18,10 @@ echo "==========================="
 if [ -z $1 ]; then
     echo "No project name specified ..."
     echo "Available projects are:"
-    ls -lh $ROOT/$NAME*
+    ls -lh $ROOT | grep $NAME
+    echo ""
+    echo " !! Exiting !!"
+    echo ""
     exit 1
 fi
 SIMD=$ROOT/$NAME.$1
@@ -27,6 +31,7 @@ if [ -d "$SIMD" ]; then
         rm -rfv $SIMD
     else
         echo "Folder already exists. Only symlinks will be updated."
+        echo ""
     fi
 else
     mv -v $SIMD $SIMD.$(date +%Y.%m.%d)
@@ -39,9 +44,8 @@ CURR=$(pwd)
 mkdir -pv $SIMD
 cd $SIMD
 
-ln -sf $MADR/$MADX                            $MADX
-ln -sf $CURR/makeOptics.madx                  makeOptics.madx
-ln -sf $CURR/align_sepdip.madx                align_sepdip.madx
-ln -sf /afs/cern.ch/eng/lhc/optics/runII/2015 db5
-ln -sf $HOME/Code/LHC-Optics/HL-LHCv1.3       slhc
+ln -svf  $MADR/$MADX                            $MADX
+ln -svf  $CURR/makeOptics.madx                  makeOptics.madx
+ln -svnf /afs/cern.ch/eng/lhc/optics/runII/2015 db5
+ln -svnf $HOME/Code/LHC-Optics/HL-LHCv1.3       slhc
 echo ""
