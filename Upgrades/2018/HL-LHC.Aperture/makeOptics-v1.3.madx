@@ -3,7 +3,7 @@ is_thin = 0;
 option, warn, info;
 
 ! Folders
-system, "mkdir apertureHLLHC1.2";
+system, "mkdir aperture";
 !system, "ln -fvns /afs/cern.ch/eng/lhc/optics/runII/2015 db5";
 !system, "ln -fvns /afs/cern.ch/eng/lhc/optics/HLLHCV1.2  slhc";
 
@@ -66,7 +66,7 @@ beam,
     ey       = 3.35097159286e-10;
 
 ! Strength definition
-call, file = "slhc/opt_round_thin.madx";
+call, file = "slhc/opt_150_150_150_150_thin.madx";
 !call, file = "slhc/opt_vdm30.madx";
 nrj = beam%lhcb1->pc/beam%lhcb1->charge;
 
@@ -108,28 +108,28 @@ select, flag = twiss, clear;
 select, flag = twiss, pattern = "IP.$", column = name, s, 
     betx, bety, alfx, alfy, dx, dpx, dy, dpy, mux, muy, x, y, px, py;
 use,    sequence = lhcb1;
-twiss,  file = "apertureHLLHC1.2/twiss_ip_lhcb1.tfs";
+twiss,  file = "aperture/twiss_ip_lhcb1.tfs";
 use,    sequence = lhcb2;
-twiss,  file = "apertureHLLHC1.2/twiss_ip_lhcb2.tfs";
+twiss,  file = "aperture/twiss_ip_lhcb2.tfs";
 
 select, flag = twiss, clear;
 select, flag = twiss, column = name, keyword, parent, kmax, kmin, calib, polarity,
     x, y, px, py, betx, bety, alfx, alfy, mux, muy, dx, dy, dpx, dpy,
     s, l, lrad, kick, hkick, vkick, angle;
 use,    sequence = lhcb1;
-twiss,  file = "apertureHLLHC1.2/twiss_lhcb1.tfs";
+twiss,  file = "aperture/twiss_lhcb1.tfs";
 use,    sequence = lhcb2;
-twiss,  file = "apertureHLLHC1.2/twiss_lhcb2.tfs";
+twiss,  file = "aperture/twiss_lhcb2.tfs";
 
 ! Aperture
 select, flag = twiss, clear;
 select, flag = twiss, column = name, keyword, parent, s, apertype, rtol, xtol, ytol;
 use,    sequence = lhcb1;
-survey, file = "apertureHLLHC1.2/survey_lhcb1.tfs";
-twiss,  file = "apertureHLLHC1.2/twiss_lhcb1_aperture.tfs";
+survey, file = "aperture/survey_lhcb1.tfs";
+twiss,  file = "aperture/twiss_lhcb1_aperture.tfs";
 use,    sequence = lhcb2;
-survey, file = "apertureHLLHC1.2/survey_lhcb2.tfs";
-twiss,  file = "apertureHLLHC1.2/twiss_lhcb2_aperture.tfs";
+survey, file = "aperture/survey_lhcb2.tfs";
+twiss,  file = "aperture/twiss_lhcb2_aperture.tfs";
 
 if (NRJ<4999.9999) {VRF400  =  8.; LAGRF400.B1 = 0.5; LAGRF400.B2 = 0.;};
 if (NRJ>5000.0000) {VRF400 := 16.; LAGRF400.B1 = 0.5; LAGRF400.B2 = 0.;};
