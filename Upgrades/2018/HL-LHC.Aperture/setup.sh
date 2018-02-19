@@ -51,6 +51,7 @@ cd $SIMD
 
 ln -svf  $MADR/$MADX                            $MADX
 ln -svf  $CURR/makeOptics-v$VERS.madx           makeOptics.madx
+ln -svf  $CURR/job.madx                         job.madx
 ln -svnf /afs/cern.ch/eng/lhc/optics/runII/2015 db5
 ln -svnf $HOME/Code/LHC-Optics/HL-LHCv$VERS     slhc
 echo ""
