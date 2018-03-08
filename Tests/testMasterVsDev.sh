@@ -35,7 +35,7 @@ else
 fi
 
 cd $DDIR
-if [ -d "$MDIR" ]; then
+if [ -d "$DDIR" ]; then
     echo "Updating dev branch ..."
     git checkout dev
     git pull origin dev
