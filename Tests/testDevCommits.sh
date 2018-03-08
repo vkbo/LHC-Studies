@@ -7,6 +7,7 @@ DDIR=$RDIR/$TDIR/Dev
 CDIR=SixTrack/SixTrack_cmakesix_BUILD_TESTING_gfortran_release/SixTest
 
 mkdir -pv $ODIR
+mkdir -pv $DDIR
 echo ""
 
 cd $DDIR
@@ -15,7 +16,6 @@ if [ -d "$DDIR/.git" ]; then
     git checkout dev
     git pull origin dev
 else
-    mkdir -pv $DDIR
     echo "Downloading dev branch ..."
     git clone git@github.com:SixTrack/SixTrack.git .
 fi
