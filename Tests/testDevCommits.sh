@@ -2,34 +2,36 @@
 
 RDIR=/scratch/Testing
 TDIR=testDevCommits
+PULL=dev
 ODIR=$RDIR/$TDIR/$(date +%Y%m%d-%H%M%S)-Results
-DDIR=$RDIR/$TDIR/Dev
+SDIR=$RDIR/$TDIR/Source
 CDIR=SixTrack/SixTrack_cmakesix_BUILD_TESTING_gfortran_release/SixTest
 
 mkdir -pv $ODIR
-mkdir -pv $DDIR
+mkdir -pv $SDIR
 echo ""
 
-cd $DDIR
-if [ -d "$DDIR/.git" ]; then
-    echo "Updating dev branch ..."
-    git checkout dev
-    git pull origin dev
+cd $SDIR
+if [ -d "$SDIR/.git" ]; then
+    echo "Updating $PULL branch ..."
+    git remote update
+    git checkout $PULL
+    git pull origin $PULL
 else
-    echo "Downloading dev branch ..."
+    echo "Downloading $PULL branch ..."
     git clone https://github.com/SixTrack/SixTrack.git .
-    git checkout dev
+    git checkout $PULL
 fi
 git status
 echo ""
 
-touch $ODIR/dev.summary.out
+touch $ODIR/summary.out
 
-echo " Run  | Pass | Total    | Fast     | Medium   | Commit Hash                              | Message" >> $ODIR/dev.summary.out
-echo "------|------|----------|----------|----------|------------------------------------------|------------------------------------------" >> $ODIR/dev.summary.out
+echo " Run  | Pass | Total    | Fast     | Medium   | Commit Hash                              | Message" >> $ODIR/summary.out
+echo "------|------|----------|----------|----------|------------------------------------------|------------------------------------------" >> $ODIR/summary.out
 
 ITT=0
-for COMMIT in $(git rev-list dev); do
+for COMMIT in $(git rev-list $PULL); do
     
     ITT=$((ITT+1))
     if [ $ITT -gt $2 ]; then
@@ -53,23 +55,23 @@ for COMMIT in $(git rev-list dev); do
     fi
     echo ""
     
-    OUTF=dev.$(printf %04d $ITT).out
-    CMPF=dev.$(printf %04d $ITT).log
+    OUTF=$(printf %04d $ITT).out
+    CMPF=$(printf %04d $ITT).log
     
-    cd $DDIR
+    cd $SDIR
     if [ "$4" == "-nb" ]; then
         echo "Skipping build ..."
         echo ""
     else
-        echo "Building dev branch on commit $COMMIT ..."
+        echo "Building $PULL branch on commit $COMMIT ..."
         cd SixTrack
         ./cmake_six gfortran release BUILD_TESTING > $ODIR/$CMPF 2>&1
         echo "Done"
         echo ""
     fi
     
-    if [ -d "$DDIR/$CDIR" ]; then
-        cd $DDIR/$CDIR
+    if [ -d "$SDIR/$CDIR" ]; then
+        cd $SDIR/$CDIR
         sleep 5
         ctest $1 | tee $ODIR/$OUTF
         TIME=$(tail -n20 $ODIR/$OUTF | grep "Test time")
@@ -82,10 +84,10 @@ for COMMIT in $(git rev-list dev); do
         PASS=$(echo ${PASS:0:4} | tr -dc "0-9")
         HASH=$(git rev-parse HEAD)
         CMSG=$(git log -1 --pretty=%B | head -n1)
-        echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) | $(printf %8.2f $FAST) | $(printf %8.2f $MEDI) | $HASH | $CMSG" >> $ODIR/dev.summary.out
+        echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) | $(printf %8.2f $FAST) | $(printf %8.2f $MEDI) | $HASH | $CMSG" >> $ODIR/summary.out
         echo ""
     else
-        echo " Failed to compile ... " >> $ODIR/dev.summary.out
+        echo " Failed to compile ... " >> $ODIR/summary.out
         echo "Failed to compile ... "
     fi
     echo ""
@@ -97,7 +99,7 @@ echo ""
 echo " Summary for ctest $1"
 echo "************************************************************************************************************************************"
 echo ""
-cat $ODIR/dev.summary.out | cut -c -132
+cat $ODIR/summary.out | cut -c -132
 echo ""
 echo "************************************************************************************************************************************"
 echo ""
