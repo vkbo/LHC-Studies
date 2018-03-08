@@ -25,9 +25,9 @@ echo ""
 
 touch $ODIR/dev.summary.out
 
-echo " Run  | Pass | Time         | Commit Hash" >> $ODIR/dev.summary.out
-echo "------|------|--------------|-------------------------------------------------------------------------------------------------------" >> $ODIR/dev.summary.out
-#for ((i=1; i<=$2; i++)); do
+echo " Run  | Pass | Total    | Fast     | Medium   | Commit Hash                              | Message" >> $ODIR/dev.summary.out
+echo "------|------|----------|----------|----------|------------------------------------------|------------------------------------------" >> $ODIR/dev.summary.out
+
 ITT=0
 for COMMIT in $(git rev-list dev); do
     
@@ -35,18 +35,29 @@ for COMMIT in $(git rev-list dev); do
     if [ $ITT -gt $2 ]; then
         break
     fi
+    if [ ! $(((($ITT-1))%$3)) == "0" ]; then
+        echo "Skipping iteration $ITT"
+        continue
+    fi
+    
+    echo ""
     echo " Running $ITT of $2 ..."
     echo "************************************************************************************************************************************"
     echo ""
-    echo "git checkout --detach $COMMIT"
-    git checkout --detach $COMMIT
+    if [ "$4" == "-mrg" ]; then
+        echo "git reset --hard HEAD~1"
+        git reset --hard HEAD~1
+    else
+        echo "git checkout --detach $COMMIT"
+        git checkout --detach $COMMIT
+    fi
     echo ""
     
     OUTF=dev.$(printf %04d $ITT).out
     CMPF=dev.$(printf %04d $ITT).log
     
     cd $DDIR
-    if [ "$3" == "-nb" ]; then
+    if [ "$4" == "-nb" ]; then
         echo "Skipping build ..."
         echo ""
     else
@@ -63,11 +74,15 @@ for COMMIT in $(git rev-list dev); do
         ctest $1 | tee $ODIR/$OUTF
         TIME=$(tail -n20 $ODIR/$OUTF | grep "Test time")
         TIME=$(echo ${TIME:24} | tr -dc "0-9\.")
+        FAST=$(tail -n20 $ODIR/$OUTF | grep "fast")
+        FAST=$(echo ${FAST:9:12} | tr -dc "0-9\.")
+        MEDI=$(tail -n20 $ODIR/$OUTF | grep "medium")
+        MEDI=$(echo ${MEDI:9:12} | tr -dc "0-9\.")
         PASS=$(tail -n20 $ODIR/$OUTF | grep "tests passed")
         PASS=$(echo ${PASS:0:4} | tr -dc "0-9")
         HASH=$(git rev-parse HEAD)
         CMSG=$(git log -1 --pretty=%B | head -n1)
-        echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) sec | $HASH > $CMSG" >> $ODIR/dev.summary.out
+        echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) | $(printf %8.2f $FAST) | $(printf %8.2f $MEDI) | $HASH | $CMSG" >> $ODIR/dev.summary.out
         echo ""
     else
         echo " Failed to compile ... " >> $ODIR/dev.summary.out
@@ -78,6 +93,7 @@ for COMMIT in $(git rev-list dev); do
     echo ""
 done
 
+echo ""
 echo " Summary for ctest $1"
 echo "************************************************************************************************************************************"
 echo ""
