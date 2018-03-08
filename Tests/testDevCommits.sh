@@ -18,6 +18,7 @@ if [ -d "$DDIR/.git" ]; then
 else
     echo "Downloading dev branch ..."
     git clone https://github.com/SixTrack/SixTrack.git .
+    git checkout dev
 fi
 git status
 echo ""
