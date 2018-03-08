@@ -108,5 +108,10 @@ mv -v fort.3 fort.3.orig
 mv -v fort.3.mod fort.3
 # Collimation
 cp -v $CURR/CollDB-HLLHC.dat CollDB-HLLHC.dat
+# head -n -1 fort.3 > fort.3.tmp
+# cat $SIMD/MadX/fc.3.aper >> fort.3.tmp
+# echo "ENDE" >> fort.3.tmp
+# rm -v fort.3
+# mv -v fort.3.tmp fort.3
 echo ""
 

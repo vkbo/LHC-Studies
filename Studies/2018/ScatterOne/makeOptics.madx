@@ -65,8 +65,8 @@ beam,
     ey       = 3.35097159286e-10;
 
 ! Strength definition
-call, file = "slhc/opt_round_thin.madx";
-!call, file = "slhc/opt_vdm30.madx";
+!call, file = "slhc/opt_round_thin.madx";
+call, file = "slhc/opt_vdm30.madx";
 nrj = beam%lhcb1->pc/beam%lhcb1->charge;
 
 ! Cycle
