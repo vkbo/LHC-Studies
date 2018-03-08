@@ -44,7 +44,7 @@ for COMMIT in $(git rev-list dev); do
     echo " Running $ITT of $2 ..."
     echo "************************************************************************************************************************************"
     echo ""
-    if [ "$4" == "-mrg" ]; then
+    if [ "$4" == "-mrg" ] && [ "$ITT" -gt 1 ]; then
         echo "git reset --hard HEAD~1"
         git reset --hard HEAD~1
     else
