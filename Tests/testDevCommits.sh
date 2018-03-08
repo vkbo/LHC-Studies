@@ -17,7 +17,7 @@ if [ -d "$DDIR/.git" ]; then
     git pull origin dev
 else
     echo "Downloading dev branch ..."
-    git clone https://github.com:SixTrack/SixTrack.git .
+    git clone https://github.com/SixTrack/SixTrack.git .
 fi
 git status
 echo ""
