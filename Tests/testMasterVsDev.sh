@@ -63,13 +63,13 @@ for ((i=1; i<=$2; i++)); do
     echo "Running tests - sample $i of $2 on master ..."
     cd $MDIR/$CDIR
     ctest $1 | tee $ODIR/master.$i.out
-    tail -n1 $ODIR/master.$i.out >> $ODIR/master.summary.out
+    echo $(tail -n10 $ODIR/master.$i.out | grep "Total Test time") >> $ODIR/master.summary.out
     echo ""
 
     echo "Running tests - sample $i of $2 on dev ..."
     cd $DDIR/$CDIR
     ctest $1 | tee $ODIR/dev.$i.out
-    tail -n1 $ODIR/dev.$i.out >> $ODIR/dev.summary.out
+    echo $(tail -n10 $ODIR/dev.$i.out | grep "Total Test time") >> $ODIR/dev.summary.out
     echo ""
 done
 

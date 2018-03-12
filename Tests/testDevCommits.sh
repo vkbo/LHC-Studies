@@ -3,6 +3,7 @@
 RDIR=/scratch/Testing
 TDIR=testDevCommits
 PULL=dev
+REPO=https://github.com/SixTrack/SixTrack.git
 ODIR=$RDIR/$TDIR/$(date +%Y%m%d-%H%M%S)-Results
 SDIR=$RDIR/$TDIR/Source
 CDIR=SixTrack/SixTrack_cmakesix_BUILD_TESTING_gfortran_release/SixTest
@@ -19,7 +20,7 @@ if [ -d "$SDIR/.git" ]; then
     git pull origin $PULL
 else
     echo "Downloading $PULL branch ..."
-    git clone https://github.com/SixTrack/SixTrack.git .
+    git clone $REPO .
     git checkout $PULL
 fi
 git status
@@ -27,8 +28,11 @@ echo ""
 
 touch $ODIR/summary.out
 
+echo "" >> $ODIR/summary.out
+echo "Command: ctest $1" >> $ODIR/summary.out
+echo "" >> $ODIR/summary.out
 echo " Run  | Pass | Total    | Fast     | Medium   | Commit Hash                              | Message" >> $ODIR/summary.out
-echo "------|------|----------|----------|----------|------------------------------------------|------------------------------------------" >> $ODIR/summary.out
+echo "------|------|----------|----------|----------|------------------------------------------|----------------------------------------------" >> $ODIR/summary.out
 
 ITT=0
 for COMMIT in $(git rev-list $PULL); do
@@ -44,7 +48,7 @@ for COMMIT in $(git rev-list $PULL); do
     
     echo ""
     echo " Running $ITT of $2 ..."
-    echo "************************************************************************************************************************************"
+    echo "****************************************************************************************************************************************"
     echo ""
     if [ "$4" == "-mrg" ] && [ "$ITT" -gt 1 ]; then
         echo "git reset --hard HEAD~1"
@@ -84,22 +88,22 @@ for COMMIT in $(git rev-list $PULL); do
         PASS=$(echo ${PASS:0:4} | tr -dc "0-9")
         HASH=$(git rev-parse HEAD)
         CMSG=$(git log -1 --pretty=%B | head -n1)
-        echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) | $(printf %8.2f $FAST) | $(printf %8.2f $MEDI) | $HASH | $CMSG" >> $ODIR/summary.out
+        echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) | $(printf %8.2f $FAST) | $(printf %8.2f $MEDI) | $HASH | $(echo $CMSG | cut -c -44)" >> $ODIR/summary.out
         echo ""
     else
         echo " Failed to compile ... " >> $ODIR/summary.out
         echo "Failed to compile ... "
     fi
     echo ""
-    echo "************************************************************************************************************************************"
+    echo "****************************************************************************************************************************************"
     echo ""
 done
 
 echo ""
 echo " Summary for ctest $1"
-echo "************************************************************************************************************************************"
+echo "****************************************************************************************************************************************"
 echo ""
-cat $ODIR/summary.out | cut -c -132
+cat $ODIR/summary.out | cut -c -136
 echo ""
-echo "************************************************************************************************************************************"
+echo "****************************************************************************************************************************************"
 echo ""
