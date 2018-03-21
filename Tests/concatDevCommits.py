@@ -2,7 +2,8 @@
 
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot  as plt
+import matplotlib.patches as pch
 
 from os import path, listdir
 
@@ -14,11 +15,15 @@ def concatData(dataPath, withColor, withPlot):
     
     comFile  = open(path.join(dataPath,"commits.out"),mode="r")
     comMsg   = {}
+    pullReq  = {}
     for comLine in comFile:
-        comMsg[comLine[0:40]] = [
-            comLine[41:66].strip(),
-            comLine[68:].strip()
-        ]
+        theHash    = comLine[0:40]
+        theName    = comLine[41:66].strip()
+        theMessage = comLine[68:].strip()
+        comMsg[theHash] = [theName,theMessage]
+        if theMessage[0:20] == "Merge pull request #":
+            theDetails = theMessage.split()
+            pullReq[theHash] = [theDetails[3],theDetails[5]]
     comFile.close()
     
     #
@@ -78,7 +83,11 @@ def concatData(dataPath, withColor, withPlot):
                 if testName not in incTests:
                     incTests.append(testName)
                     plotData[testName] = []
-                plotData[testName].append(testTime)
+                if testStatus == "Passed":
+                    plotData[testName].append(testTime)
+                else:
+                    plotData[testName].append(0.0)
+            
         logFile.close()
         
         allData[testNo] = {
@@ -98,8 +107,8 @@ def concatData(dataPath, withColor, withPlot):
     #
     
     print("")
-    print(" Commit Hash and Message")
-    print("*************************")
+    print(" Commit Hash, Author and Message")
+    print("*********************************")
     for testNo in incNums:
         print((BOLD+"%4s"+END+" "+YELLOW+"%s"+END+" "+CYAN+"%-20s"+END+" %s") % (
             testNo,
@@ -149,18 +158,53 @@ def concatData(dataPath, withColor, withPlot):
         "bbe571ib0"  : 98.90
     }
     
+    pDPI = 120
+    pW   = 1400
+    pH   = 800
+    yMin = -10
+    yMax = 40
+    xMin = -1
+    xMax = len(incNums)
+    xOff = (xMax-xMin)/pW
+    
+    figMain = plt.figure(1,figsize=(pW/pDPI,pH/pDPI),dpi=pDPI)
+    axMain  = figMain.add_subplot(111)
+    
     xAxis = range(len(incNums))
+    fTest = np.zeros(len(incNums),dtype=int)
     for testName in incTests:
         yAxis = np.array(plotData[testName])
+        fTest[np.where(yAxis==0.0)] += 1
+        yAxis = np.ma.masked_where(yAxis == 0.0, yAxis)
         #rTime = yAxis[-1]
         rTime = refTime[testName]
-        yAxis = 100*yAxis/rTime
-        plt.step(xAxis, yAxis, label=testName)
+        yAxis = 100*yAxis/rTime - 100
+        plt.plot(xAxis, yAxis, label=testName)
     
+    # Display Pull Requests
+    for testNo in incNums:
+        testHash = allData[testNo]["commitHash"]
+        if testHash in pullReq.keys():
+            prPos   = int(testNo)-0.7
+            prLabel = "%s: %s" % tuple(pullReq[testHash])
+            plt.axvline(x=prPos-8*xOff, color="k", linestyle="--")
+            plt.text(prPos, yMin+1, prLabel, va="bottom", rotation=90, fontsize="smaller")
+    
+    # Display Failed Tests
+    for testIdx in range(len(fTest)):
+        if fTest[testIdx] == 0:
+            continue
+        fCol = (1.0,1.0-(1/len(incTests))*fTest[testIdx],0.0,0.1)
+        axMain.add_patch(pch.Rectangle(
+            (testIdx-1, yMin), 2, yMax-yMin, facecolor=fCol
+        ))
+        
     plt.legend()
     plt.title("SixTrack Performance")
     plt.xlabel("Commits Behind DEV")
-    plt.ylabel("Relative Time [%]")
+    plt.ylabel("RunTime vs. Master [%]")
+    plt.xlim((xMin,xMax))
+    plt.ylim((yMin,yMax))
     
     plt.show(block=True)
     
