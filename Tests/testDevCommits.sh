@@ -74,6 +74,12 @@ for COMMIT in $(git rev-list $PULL); do
         echo ""
     fi
     
+    HASH=$(git rev-parse HEAD)
+    CMSG=$(git log -1 --pretty=%B | head -n1)
+    CUSR=$(git log -1 --format=%aN)
+    CUSR=$(printf %-24s "$CUSR")
+    echo "$HASH $CUSR : $CMSG" >> $ODIR/commits.out
+    
     if [ -d "$SDIR/$CDIR" ]; then
         cd $SDIR/$CDIR
         sleep 5
@@ -86,8 +92,6 @@ for COMMIT in $(git rev-list $PULL); do
         MEDI=$(echo ${MEDI:9:12} | tr -dc "0-9\.")
         PASS=$(tail -n20 $ODIR/$OUTF | grep "tests passed")
         PASS=$(echo ${PASS:0:4} | tr -dc "0-9")
-        HASH=$(git rev-parse HEAD)
-        CMSG=$(git log -1 --pretty=%B | head -n1)
         echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) | $(printf %8.2f $FAST) | $(printf %8.2f $MEDI) | $HASH | $(echo $CMSG | cut -c -44)" >> $ODIR/summary.out
         echo ""
     else
