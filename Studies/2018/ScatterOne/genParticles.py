@@ -9,16 +9,14 @@ from sttools import PartDist, Const
 def genParticles(seedFile,outPath):
     
     distParam = {
-        "energy"  : 10.0,
-        "mass"    : 1.0,
-        "gemit"   : [1.0, 1.0],
-        "twalpha" : [0.0, 0.0],
-        "sigmaz"  : 1.0,
-        "spreade" : 1.0,
+        "sigmaxxp" : [1.0, 1.0],
+        "sigmayyp" : [1.0, 1.0],
+        "sigmaz"   : 1.0,
+        "spreadp"  : 1.0,
     }
     pDist = PartDist(distParam)
     pDist.setSeed(int(time()),seedFile)
-    pDist.genDist(512)
+    pDist.genNormDist(512)
     pDist.writeCollDist(outPath,512)
     
     return

@@ -15,7 +15,7 @@ def prepareFort3(aperFile, fileName, scatterPoint):
     # for qIndex in qPoles:
     #     qMarker = beamOne.aperData.Data["NAME"][qIndex].lower()
     #     fThree.addBlockLineFromString("DUMP","%s 1 650 2 dump.txt 11 12" % (qMarker+"..1"))
-    fThree.addBlockLineFromString("DUMP","ALL 1 651 2 dump_all.txt 3 4")
+    #fThree.addBlockLineFromString("DUMP","ALL 1 651 2 dump_all.txt 3 4")
     fThree.addBlockFromFile("LIMI","../MadX","fc.3.aper")
     
     fThree.saveFile("./","fort.3.mod")

@@ -33,7 +33,7 @@ fi
 SIMD=$ROOT/$NAME.$1
 SIXR=$HOME/Code/SixTrack
 MADR=$HOME/Code/MadX
-APER=$SIXR/Analysis/Aperture
+APER=$HOME/Code/LHC-Studies/Aperture
 CURR=$(pwd)
 
 if [ -d "$SIMD" ]; then
@@ -61,6 +61,7 @@ ln -svf $MADR/$MADX                   MadX/$MADX
 ln -svf $CURR/makeOptics.madx         MadX/makeOptics.madx
 ln -svf $SIXR/$COLL                   ST.Coll/$COLL
 ln -svf $SIXR/$SIXT                   ST.Norm/$SIXT
+ln -svf $CURR/genParticles.py         ST.Coll/genParticles.py
 echo ""
 
 echo "Generating Aperture Files (MadX)"
