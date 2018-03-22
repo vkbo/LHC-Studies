@@ -70,25 +70,33 @@ def concatData(dataPath, withColor, withPlot):
         commitMsg = lineData[6].strip()
         incNums.append(testNo)
         
-        logFile   = open(path.join(dataPath,testNo+".out"),mode="r")
-        logResult = {}
-        for logLine in logFile:
-            if logLine[4:10] == "Test #":
-                logLine    = logLine.replace("***","   ")
-                logData    = logLine.split()
-                testName   = logData[3]
-                testStatus = logData[5]
-                testTime   = float(logData[6])
-                logResult[testName] = [testStatus, float(testTime)]
-                if testName not in incTests:
-                    incTests.append(testName)
-                    plotData[testName] = []
-                if testStatus == "Passed":
-                    plotData[testName].append(testTime)
-                else:
+        if path.isfile(path.join(dataPath,testNo+".out")):
+            logFile   = open(path.join(dataPath,testNo+".out"),mode="r")
+            logResult = {}
+            for logLine in logFile:
+                if logLine[4:10] == "Test #":
+                    logLine    = logLine.replace("***","   ")
+                    logData    = logLine.split()
+                    testName   = logData[3]
+                    testStatus = logData[5]
+                    testTime   = float(logData[6])
+                    logResult[testName] = [testStatus, float(testTime)]
+                    if testName not in incTests:
+                        incTests.append(testName)
+                        plotData[testName] = []
+                    if testStatus == "Passed":
+                        plotData[testName].append(testTime)
+                    else:
+                        plotData[testName].append(0.0)
+            for testName in incTests:
+                if testName not in logResult:
+                    logResult[testName] = ["None", 0.0]
                     plotData[testName].append(0.0)
-            
-        logFile.close()
+            logFile.close()
+        else:
+            for testName in incTests:
+                logResult[testName] = ["None", 0.0]
+                plotData[testName].append(0.0)
         
         allData[testNo] = {
             "pass"       : testPass,
@@ -185,10 +193,10 @@ def concatData(dataPath, withColor, withPlot):
     for testNo in incNums:
         testHash = allData[testNo]["commitHash"]
         if testHash in pullReq.keys():
-            prPos   = int(testNo)-0.7
+            prPos   = int(testNo)-1
             prLabel = "%s: %s" % tuple(pullReq[testHash])
-            plt.axvline(x=prPos-8*xOff, color="k", linestyle="--")
-            plt.text(prPos, yMin+1, prLabel, va="bottom", rotation=90, fontsize="smaller")
+            plt.axvline(x=prPos, color="k", linestyle="--")
+            plt.text(prPos+8*xOff, yMin+1, prLabel, va="bottom", rotation=90, fontsize="smaller")
     
     # Display Failed Tests
     for testIdx in range(len(fTest)):

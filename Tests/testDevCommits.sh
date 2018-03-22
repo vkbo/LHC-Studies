@@ -26,13 +26,14 @@ fi
 git status
 echo ""
 
-touch $ODIR/summary.out
-
-echo "" >> $ODIR/summary.out
-echo "Command: ctest $1" >> $ODIR/summary.out
-echo "" >> $ODIR/summary.out
-echo " Run  | Pass | Total    | Fast     | Medium   | Commit Hash                              | Message" >> $ODIR/summary.out
-echo "------|------|----------|----------|----------|------------------------------------------|----------------------------------------------" >> $ODIR/summary.out
+if [ ! -f $ODIR/summary.out ]; then
+    touch $ODIR/summary.out
+    echo "" >> $ODIR/summary.out
+    echo "Command: ctest $1" >> $ODIR/summary.out
+    echo "" >> $ODIR/summary.out
+    echo " Run  | Pass | Total    | Fast     | Medium   | Commit Hash                              | Message" >> $ODIR/summary.out
+    echo "------|------|----------|----------|----------|------------------------------------------|----------------------------------------------" >> $ODIR/summary.out
+fi
 
 ITT=0
 for COMMIT in $(git rev-list $PULL); do
@@ -92,12 +93,13 @@ for COMMIT in $(git rev-list $PULL); do
         MEDI=$(echo ${MEDI:9:12} | tr -dc "0-9\.")
         PASS=$(tail -n20 $ODIR/$OUTF | grep "tests passed")
         PASS=$(echo ${PASS:0:4} | tr -dc "0-9")
-        echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) | $(printf %8.2f $FAST) | $(printf %8.2f $MEDI) | $HASH | $(echo $CMSG | cut -c -44)" >> $ODIR/summary.out
-        echo ""
     else
-        echo " Failed to compile ... " >> $ODIR/summary.out
-        echo "Failed to compile ... "
+        TIME=0.0
+        FAST=0.0
+        MEDI=0.0
+        PASS=0.0
     fi
+    echo " $(printf %04d $ITT) | $(printf %3d $PASS)% | $(printf %8.2f $TIME) | $(printf %8.2f $FAST) | $(printf %8.2f $MEDI) | $HASH | $(echo $CMSG | cut -c -44)" >> $ODIR/summary.out
     echo ""
     echo "****************************************************************************************************************************************"
     echo ""
