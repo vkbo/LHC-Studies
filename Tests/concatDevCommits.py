@@ -76,6 +76,7 @@ def concatData(dataPath, withColor, withPlot):
             for logLine in logFile:
                 if logLine[4:10] == "Test #":
                     logLine    = logLine.replace("***","   ")
+                    logLine    = logLine.replace("Not Run","NotRun")
                     logData    = logLine.split()
                     testName   = logData[3]
                     testStatus = logData[5]
@@ -173,6 +174,8 @@ def concatData(dataPath, withColor, withPlot):
     yMax = 40
     xMin = -1
     xMax = len(incNums)
+    # xMin = 450
+    # xMax = 600
     xOff = (xMax-xMin)/pW
     
     figMain = plt.figure(1,figsize=(pW/pDPI,pH/pDPI),dpi=pDPI)
@@ -194,9 +197,11 @@ def concatData(dataPath, withColor, withPlot):
         testHash = allData[testNo]["commitHash"]
         if testHash in pullReq.keys():
             prPos   = int(testNo)-1
+            if prPos < xMin or prPos > xMax:
+                continue
             prLabel = "%s: %s" % tuple(pullReq[testHash])
-            plt.axvline(x=prPos, color="k", linestyle="--")
-            plt.text(prPos+8*xOff, yMin+1, prLabel, va="bottom", rotation=90, fontsize="smaller")
+            # plt.axvline(x=prPos, color="k", linestyle="--")
+            # plt.text(prPos+5*xOff, yMin+1, prLabel, va="bottom", rotation=90, fontsize="smaller")
     
     # Display Failed Tests
     for testIdx in range(len(fTest)):
@@ -207,13 +212,14 @@ def concatData(dataPath, withColor, withPlot):
             (testIdx-1, yMin), 2, yMax-yMin, facecolor=fCol
         ))
         
-    plt.legend()
+    plt.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.0)
     plt.title("SixTrack Performance")
     plt.xlabel("Commits Behind DEV")
     plt.ylabel("RunTime vs. Master [%]")
     plt.xlim((xMin,xMax))
     plt.ylim((yMin,yMax))
     
+    plt.subplots_adjust(left=0.06, right=0.87, top=0.95, bottom=0.08)
     plt.show(block=True)
     
     return
