@@ -1,0 +1,145 @@
+! Settings
+is_thin = 1;
+option, warn, info;
+
+! Folders
+system, "ln -fvns /afs/cern.ch/eng/lhc/optics/runII/2015 db5";
+system, "ln -fvns /afs/cern.ch/eng/lhc/optics/HLLHCV1.2  slhc";
+
+! Sequence definition
+option, -echo, warn, -info;
+
+real const l.TAN   = 3.7;
+real const l.TANAL = l.TAN;
+real const l.TANAR = l.TAN;
+real const l.TANC  = l.TAN;
+real const l.TCT   = 1.0;
+real const l.TCTH  = l.TCT;
+real const l.TCTVA = l.TCT;
+real const l.MBAS2 = 0;
+real const l.MBAW  = 0;
+real const l.MBCS2 = 0;
+real const l.MBLS2 = 0;
+real const l.MBLW  = 0;
+real const l.MBWMD = 0;
+real const l.MBXWH = 0;
+real const l.MBXWS = 0;
+real const l.MBXWT = 0;
+
+call, file = "db5/lhc_as-built.seq";
+call, file = "slhc/toolkit/macro.madx";
+call, file = "slhc/hllhc_sequence.madx";
+
+! Aperture definition
+call, file = "db5/aperture/aperture_as-built.b1.madx";
+call, file = "db5/aperture/aperture_as-built.b2.madx";
+call, file = "db5/aperture/aper_tol_as-built.b1.madx";
+call, file = "db5/aperture/aper_tol_as-built.b2.madx";
+call, file = "slhc/aperture/exp_pipe_model_after_LS3.madx";
+call, file = "slhc/aperture/exp_pipe_install_after_LS3.madx";
+call, file = "slhc/aperture/aperture_upgrade_IT.madx";
+call, file = "slhc/aperture/aperture_upgrade_MS.madx";
+
+! Beam definition
+beam,
+    sequence = lhcb1,
+    bv       = 1,
+    particle = proton,
+    charge   = 1,
+    mass     = 0.9382720813,
+    energy   = 7000,
+    npart    = 2.2e+11,
+    kbunch   = 2748,
+    ex       = 3.35097159286e-10,
+    ey       = 3.35097159286e-10;
+beam,
+    sequence = lhcb2,
+    bv       = -1,
+    particle = proton,
+    charge   = 1,
+    mass     = 0.9382720813,
+    energy   = 7000,
+    npart    = 2.2e+11,
+    kbunch   = 2748,
+    ex       = 3.35097159286e-10,
+    ey       = 3.35097159286e-10;
+
+! Strength definition
+!call, file = "slhc/opt_round_thin.madx";
+call, file = "slhc/opt_vdm30.madx";
+nrj = beam%lhcb1->pc/beam%lhcb1->charge;
+
+! Cycle
+seqedit, sequence = lhcb1; flatten; cycle, start = IP3; endedit;
+seqedit, sequence = lhcb2; flatten; cycle, start = IP3; endedit;
+
+exec, myslice;
+
+! Post Strength
+
+! Knobs definitions
+on_sep1 := 1; on_x1 := 1;       phi_IR1 := 90.000; on_sol_atlas := 0; on_crab1 := 0;
+on_sep5 := 1; on_x5 := 1;       phi_IR5 :=  0.000; on_sol_cms   := 0; on_crab5 := 0;
+on_sep2 := 1; on_x2 := 1;       on_alice:=  1;     on_sol_alice := 0;
+on_sep8 := 1; on_x8 := 250/170; on_lhcb := -1;
+on_disp  = 1;
+
+! Knobs definitions Beta* 15cm
+on_x8 := 280/170;
+
+! Knobs definitions Beta* 30m
+!on_x8 := 1;
+
+! Twiss after customized knobs
+set,    format = "22.15e";
+
+if (NRJ<4999.9999) {VRF400  =  8.; LAGRF400.B1 = 0.5; LAGRF400.B2 = 0.;};
+if (NRJ>5000.0000) {VRF400 := 16.; LAGRF400.B1 = 0.5; LAGRF400.B2 = 0.;};
+
+use, sequence = lhcb1; twiss;
+
+! Check file output
+assign, echo="checkValues.txt", truncate;
+
+tune_qxb1  = table(summ,q1);        tune_qyb1  = table(summ,q2);
+tune_dqxb1 = table(summ,dq1);       tune_dqyb1 = table(summ,dq2);
+init_alfx  = table(twiss,IP3,alfx); init_alfy  = table(twiss,IP3,alfy);
+init_betx  = table(twiss,IP3,betx); init_bety  = table(twiss,IP3,bety);
+init_dx    = table(twiss,IP3,dx);   init_dy    = table(twiss,IP3,dy);
+init_dpx   = table(twiss,IP3,dpx);  init_dpy   = table(twiss,IP3,dpy);
+
+value, tune_qxb1,  tune_qyb1;
+value, tune_dqxb1, tune_dqyb1;
+value, init_alfx,  init_alfy;
+value, init_betx,  init_bety;
+value, init_dx,    init_dy;
+value, init_dpx,   init_dpy;
+
+! Terminal output
+xnom1 = table(twiss,IP1,x); pxnom1 = table(twiss,IP1,px);
+ynom1 = table(twiss,IP1,y); pynom1 = table(twiss,IP1,py);
+xnom2 = table(twiss,IP2,x); pxnom2 = table(twiss,IP2,px);
+ynom2 = table(twiss,IP2,y); pynom2 = table(twiss,IP2,py);
+xnom5 = table(twiss,IP5,x); pxnom5 = table(twiss,IP5,px);
+ynom5 = table(twiss,IP5,y); pynom5 = table(twiss,IP5,py);
+xnom8 = table(twiss,IP8,x); pxnom8 = table(twiss,IP8,px);
+ynom8 = table(twiss,IP8,y); pynom8 = table(twiss,IP8,py);
+qxb1_check  = table(summ,q1);
+qyb1_check  = table(summ,q2);
+dqxb1_check = table(summ,dq1);
+dqyb1_check = table(summ,dq2);
+alfx_3 = table(twiss,IP3,alfx); betx_3 = table(twiss,IP3,betx);
+dx_3   = table(twiss,IP3,dx);   dpx_3  = table(twiss,IP3,dpx);
+alfy_3 = table(twiss,IP3,alfy); bety_3 = table(twiss,IP3,bety);
+dy_3   = table(twiss,IP3,dy);   dpy_3  = table(twiss,IP3,dpy);
+
+assign, echo="terminal";
+value, xnom1,  xnom2,  xnom5,  xnom8;
+value, ynom1,  ynom2,  ynom5,  ynom8;
+value, pxnom1, pxnom2, pxnom5, pxnom8;
+value, pynom1, pynom2, pynom5, pynom8;
+value, qxb1_check, qyb1_check, dqxb1_check, dqyb1_check;
+value, alfx_3, betx_3, dx_3, dpx_3;
+value, alfy_3, bety_3, dy_3, dpy_3;
+
+sixtrack, cavall, radius = 0.017, aperture;
