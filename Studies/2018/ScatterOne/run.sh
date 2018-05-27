@@ -43,7 +43,7 @@ for ((i=1; i<=$3; i++)); do
     mv Coll_Scatter.dat $RESD
     mv scatter_log.txt  $RESD
     mv FirstImpacts.dat $RESD
-    mv dump_*.txt       $RESD
+    mv dump_*.dat       $RESD
     mv dist0.dat        $RESD
     mv distn.dat        $RESD
     mv survival.dat     $RESD
