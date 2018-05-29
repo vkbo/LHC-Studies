@@ -9,7 +9,7 @@ def prepareFort3(aperFile, fileName, scatterPoint):
     
     bufFort3 = ""
     bufLIMI  = ""
-    with open("../MadX/fc.3.aper",mode="r") as inFile:
+    with open(aperFile,mode="r") as inFile:
         bufLIMI = inFile.read()
     with open("fort.3",mode="r") as inFile:
         bufFort3 = inFile.read()

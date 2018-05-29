@@ -33,7 +33,6 @@ HDF5
     GZIP 1
     CHUNK 50
     FILE "data.hdf5" .true.
-    ROOT "sample%SAMPLE%"
     ENABLE SCATTER
     ENABLE DUMP
     ENABLE APERTURE

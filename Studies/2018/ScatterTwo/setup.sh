@@ -52,6 +52,8 @@ mkdir -pv $SIMD/Aperture
 mkdir -pv $SIMD/MadX
 mkdir -pv $SIMD/ST.Coll
 mkdir -pv $SIMD/ST.Norm
+mkdir -pv $SIMD/ST.Coll/SixIn
+mkdir -pv $SIMD/ST.Norm/SixIn
 
 cd $SIMD
 
@@ -84,9 +86,9 @@ echo ""
 
 echo "Prepare SixTrack Inputs - Normal"
 echo "================================"
-cd $SIMD/ST.Norm
+cd $SIMD/ST.Norm/SixIn
 # Fort 2
-cp $SIMD/MadX/fc.2 ./fort.2
+cp $SIMD/MadX/fc.2 fort.2
 $CURR/setupFort2.py fort.2 $IPS
 mv -v fort.2 fort.2.orig
 mv -v fort.2.mod fort.2
@@ -96,23 +98,18 @@ echo ""
 
 echo "Prepare SixTrack Inputs - Collimation"
 echo "====================================="
-cd $SIMD/ST.Coll
+cd $SIMD/ST.Coll/SixIn
 # Fort 2
-cp $SIMD/MadX/fc.2 ./fort.2
+cp $SIMD/MadX/fc.2 fort.2
 $CURR/setupFort2.py fort.2 $IPS
 mv -v fort.2 fort.2.orig
 mv -v fort.2.mod fort.2
 # Fort 3
 cp -v $CURR/fort.3.coll fort.3
-$CURR/setupFort3.py aperOne.tfs fort.3 $IPS
+$CURR/setupFort3.py $SIMD/MadX/fc.3.aper fort.3 $IPS
 mv -v fort.3 fort.3.orig
 mv -v fort.3.mod fort.3
 # Collimation
 cp -v $CURR/CollDB-HLLHC.dat CollDB-HLLHC.dat
-# head -n -1 fort.3 > fort.3.tmp
-# cat $SIMD/MadX/fc.3.aper >> fort.3.tmp
-# echo "ENDE" >> fort.3.tmp
-# rm -v fort.3
-# mv -v fort.3.tmp fort.3
 echo ""
 
