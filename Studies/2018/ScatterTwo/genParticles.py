@@ -16,8 +16,8 @@ def genParticles(seedFile,outPath):
     }
     pDist = PartDist(distParam)
     pDist.setSeed(int(time()),seedFile)
-    pDist.genNormDist(512)
-    pDist.writeCollDist(outPath,512)
+    pDist.genNormDist(5000)
+    pDist.writeCollDist(outPath,5000)
     
     return
 

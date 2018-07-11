@@ -52,8 +52,8 @@ mkdir -pv $SIMD/Aperture
 mkdir -pv $SIMD/MadX
 mkdir -pv $SIMD/ST.Coll
 mkdir -pv $SIMD/ST.Norm
-mkdir -pv $SIMD/ST.Coll/SixIn
-mkdir -pv $SIMD/ST.Norm/SixIn
+mkdir -pv $SIMD/ST.Coll
+mkdir -pv $SIMD/ST.Norm
 
 cd $SIMD
 
@@ -86,7 +86,7 @@ echo ""
 
 echo "Prepare SixTrack Inputs - Normal"
 echo "================================"
-cd $SIMD/ST.Norm/SixIn
+cd $SIMD/ST.Norm
 # Fort 2
 cp $SIMD/MadX/fc.2 fort.2
 $CURR/setupFort2.py fort.2 $IPS
@@ -98,7 +98,7 @@ echo ""
 
 echo "Prepare SixTrack Inputs - Collimation"
 echo "====================================="
-cd $SIMD/ST.Coll/SixIn
+cd $SIMD/ST.Coll
 # Fort 2
 cp $SIMD/MadX/fc.2 fort.2
 $CURR/setupFort2.py fort.2 $IPS
@@ -106,7 +106,8 @@ mv -v fort.2 fort.2.orig
 mv -v fort.2.mod fort.2
 # Fort 3
 cp -v $CURR/fort.3.coll fort.3
-$CURR/setupFort3.py $SIMD/MadX/fc.3.aper fort.3 $IPS
+cp -v $SIMD/MadX/fc.3.aper limi.dat
+$CURR/setupFort3.py $IPS
 mv -v fort.3 fort.3.orig
 mv -v fort.3.mod fort.3
 # Collimation
