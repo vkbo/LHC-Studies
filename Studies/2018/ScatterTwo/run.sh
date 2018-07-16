@@ -34,10 +34,10 @@ for ((i=$ST; i<=$3; i++)); do
     rm -rfv $RDIR
     mkdir -pv $RDIR
     cd $RDIR
-    
+
     # Generate Particles
     $SIMD/ST.Coll/genParticles.py ./seed.dat ./
-    
+
     # Set up fort.3
     cp $SIMD/ST.Coll/* ./
     SEED1=$(((10 * $i) + 1))
@@ -52,17 +52,17 @@ for ((i=$ST; i<=$3; i++)); do
     else
         sed -i "s/%H5FLAGS%//g" fort.3
     fi
-    
+
     # Run it!
     echo "Running SixTrack ..."
     ./$COLL &> fort.6
-    
+
     # Save the stuff we care about
     echo "Copying Files ..."
     tar -czf fort.tar.gz fort.3 fort.6 partDist.dat
     mv data.hdf5        $RESD/data.$SAMP.hdf5
     mv fort.tar.gz      $RESD/fort.$SAMP.tar.gz
-    
+
     # Clean up that mess
     echo "Clean-up ..."
     cd $TDIR

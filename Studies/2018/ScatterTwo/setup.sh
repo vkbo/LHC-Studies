@@ -7,8 +7,9 @@ SIXT=SixTrackH5Dev.e
 COLL=SixTrackCollH5Dev.e
 MADX=MadX.e
 
-# Scatter in IP:
+# Simulation Settings
 IPS=5
+TMIN=0.6
 
 echo ""
 echo "**************************************"
@@ -107,7 +108,7 @@ mv -v fort.2.mod fort.2
 # Fort 3
 cp -v $CURR/fort.3.coll fort.3
 cp -v $SIMD/MadX/fc.3.aper limi.dat
-$CURR/setupFort3.py $IPS
+$CURR/setupFort3.py $IPS $TMIN
 mv -v fort.3 fort.3.orig
 mv -v fort.3.mod fort.3
 # Collimation
