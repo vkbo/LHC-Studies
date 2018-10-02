@@ -1,8 +1,14 @@
 #!/bin/bash
 
+# Arguments
+# $1 Name
+# $2 Flag
+#    -r : Delete previous data
+#    -m : Backup previous data
+
 # Settings
 ROOT=/scratch/SixTrack
-NAME=ScatterThree
+NAME=TestJobHDF5
 SIXT=SixTrackPythiaH5Dev.e
 MADX=MadX.e
 
@@ -11,9 +17,9 @@ IPS=5
 TMIN=1.4
 
 echo ""
-echo "****************************************"
-echo "* Setup Script for Scatter Three Study *"
-echo "****************************************"
+echo "**************************************"
+echo "* Setup Script for Test Job for HDF5 *"
+echo "**************************************"
 
 # ================================================================================================ #
 echo ""

@@ -1,8 +1,14 @@
 #!/bin/bash
 
+# Arguments
+# $1 Name
+# $2 Run Number
+# $3 Number of Jobs
+# $4 Start with Job
+
 # Settings
 ROOT=/scratch/SixTrack
-NAME=ScatterThree
+NAME=TestJobHDF5
 SIXT=SixTrackPythiaH5Dev.e
 
 # Folders
@@ -69,6 +75,6 @@ for ((i=$ST; i<=$3; i++)); do
     # Clean up that mess
     echo "Clean-up ..."
     cd $TDIR
-    rm -rfv $RDIR
+    # rm -rfv $RDIR
     echo "Done!"
 done
