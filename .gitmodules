@@ -1,0 +1,12 @@
+[submodule "Optics/HLLHC1.2"]
+	path = Optics/HLLHC1.2
+	url = https://github.com/lhcopt/hllhc12.git
+[submodule "Optics/HLLHC1.3"]
+	path = Optics/HLLHC1.3
+	url = https://github.com/lhcopt/hllhc13.git
+[submodule "Optics/HLLHC1.4"]
+	path = Optics/HLLHC1.4
+	url = https://github.com/lhcopt/hllhc14.git
+[submodule "Optics/LHC2015"]
+	path = Optics/LHC2015
+	url = https://github.com/lhcopt/lhc2015.git
