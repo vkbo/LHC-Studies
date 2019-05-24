@@ -20,14 +20,16 @@ fi
 cd $WDIR
 
 if [ ! -e madx-linux64-gnu ]; then
-    wget http://madx.web.cern.ch/madx/releases/5.04.02/madx-linux64-gnu
+    wget http://madx.web.cern.ch/madx/releases/5.05.00/madx-linux64-gnu
 fi
 chmod +x madx-linux64-gnu
 
 ln -fvns $SDIR/Optics/LHC2015  db5
 ln -fvns $SDIR/Optics/HLLHC1.4 slhc
 
-rm *.madx
-cp -v $SDIR/Scatter/MadX/HL-LHC-1.4-v1/*.madx .
+rm -f *.madx
+# cp -v $SDIR/Scatter/MadX/HL-LHC-1.4-v1/*.madx .
+cp -v $SDIR/Aperture/makeOpticsHLLHC1.4-Offset.madx .
 
-./madx-linux64-gnu makeOptics-30m.madx
+# ./madx-linux64-gnu makeOptics-30m.madx
+# ./madx-linux64-gnu makeOptics-30m.madx
