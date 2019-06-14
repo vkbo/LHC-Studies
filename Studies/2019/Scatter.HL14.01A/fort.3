@@ -4,29 +4,17 @@ SETTINGS
     QUIET 2
 NEXT
 
-TRACKING PARAMETERS-----------------------------------------------------
-    %NTURN% 0 %NPAIR% 0 6.89493 0 1
-    1 1 1 1 2
-    0 0 1 1 1 50000 2
-NEXT
-
-INITIAL COORDINATES-----------------------------------------------------
-    2 0.0 0.0 0.333332 0
-    0.0
-    0.0
-    0.0
-    0.0
-    0.0
-    0.0
-    0.000001
-    0.0
-    0.0
-    0.0
-    0.0
-    0.0
-    %ENERGY%
-    %ENERGY%
-    %ENERGY%
+SIMULATION--------------------------------------------------------------
+    PARTICLES    %NPART%
+    TURNS        %NTURN%
+    REF_ENERGY   %ENERGY%
+    REF_PARTICLE proton
+    PDG_YEAR     2018
+    LATTICE      thin 6D
+    6D_CLORB     on
+    INIT_CLORB   off
+    WRITE_TRACKS 1e6
+    EXACT        on
 NEXT
 
 HDF5--------------------------------------------------------------------
@@ -109,23 +97,22 @@ LINEAR OPTICS-----------------------------------------------------------
 NEXT
 
 COLLIMATION-------------------------------------------------------------
-    .true.
-    1 %ENERGY%
-    6 0.0 0.0 0.0 0.0 "partDist.dat" 0.0 0.0
-    .false. 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
-    0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
-    0 19789.0 20150.0 1 1
-    -1.3899e-6 -9.345e-5 5.05324e-3 -1.6595e-2 2.15955e-2 -9.96261e-3 1.0
-    -1.3899e-6 -9.345e-5 5.05324e-3 -1.6595e-2 2.15955e-2 -9.96261e-3 1.0
-    2.5 2.5 2.5 2.5
-    .false. .false. %SEED3% .true. TCP.C6L7.B1 .false. .true. .true. .true.
-    0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 .false.
-    .false. 6.003 0.0015
-    0 0 .false. .false.
-    0 0.0019 0.0 0.275e-3 1
-    "CollDB-HLLHC.dat"  1
-    .false. .false. "" 1 1 1.0
+    DO_COLL   on
+    BEAM_NUM  1
+    COLLDB    "CollDB-HLLHC.dat"
+    ENERGY    %ENERGY%
+    EMITTANCE 2.5 2.5 2.5 2.5
+
+    SEED      %SEED3%
+    DIST_TYPE 6
+    DIST_FILE "partDist.dat"
+
+    WRITE_DIST   on
+    WRITE_IMPACT on
+    WRITE_SECOND off
+    WRITE_AMPL   on
+
+    DO_NSIG off
 NEXT
 
 LIMI--------------------------------------------------------------------

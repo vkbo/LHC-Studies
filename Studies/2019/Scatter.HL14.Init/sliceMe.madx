@@ -1,0 +1,3 @@
+! Slice D1 and D2 around IP1 and IP5
+
+select, flag=makethin, pattern=mbxf\.4, thick=false, slice=16;

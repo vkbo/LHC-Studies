@@ -19,7 +19,7 @@ partDist = {
 
 stJob = SixTrackJob(".")
 stJob.setOutput("Run", SixTrackJob.OUT_HDF5)
-stJob.setExecutable("SixTrack-5.0.2-c2bd6e4.PYTHIA-HDF5.Linux64.e")
+stJob.setExecutable("SixTrack-5.2.10-65226c1.PYTHIA-HDF5.Linux64.e")
 stJob.setPartGen(SixTrackJob.GEN_COLL, partDist)
 stJob.setNPart(10000)
 stJob.setNTurn(20)

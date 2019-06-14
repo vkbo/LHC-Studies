@@ -75,6 +75,7 @@ seqedit, sequence = lhcb1; flatten; cycle, start = IP1; endedit;
 seqedit, sequence = lhcb2; flatten; cycle, start = IP1; endedit;
 
 exec, myslice;
+! call, file = "sliceMe.madx";
 
 ! Knobs
 ! on_sep1 := 0; on_x1 := 1; phi_IR1 := 90.000; on_sol_atlas := 0; on_crab1 := 0;
