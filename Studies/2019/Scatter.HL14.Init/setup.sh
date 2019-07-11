@@ -29,15 +29,10 @@ ln -fvns $SDIR/Optics/LHC2015  db5
 ln -fvns $SDIR/Optics/HLLHC1.4 slhc
 
 rm -f *.madx
-# cp -v $SDIR/Scatter/MadX/HL-LHC-1.4-v1/*.madx .
-# cp -v $SDIR/Aperture/makeOpticsHLLHC1.4-Offset.madx .
-# cp -v $SDIR/Aperture/aperOffset.madx .
-# cp -v $CDIR/sliceMe.madx .
-# cp -v $CDIR/prepInput.py .
 ln -sfv $SDIR/Aperture/makeOpticsHLLHC1.4-Offset.madx makeOpticsHLLHC1.4-Offset.madx
-ln -sfv $SDIR/Aperture/aperOffset.madx aperOffset.madx
-ln -sfv $CDIR/sliceMe.madx sliceMe.madx
-ln -sfv $CDIR/prepInput.py prepInput.py
+ln -sfv $SDIR/Aperture/aperOffset.madx                aperOffset.madx
+ln -sfv $CDIR/sliceMe.madx                            sliceMe.madx
+ln -sfv $CDIR/prepInput.py                            prepInput.py
 
-# ./madx-linux64-gnu makeOptics-30m.madx
-# ./madx-linux64-gnu makeOptics-30m.madx
+./madx-linux64-gnu makeOpticsHLLHC1.4-Offset.madx
+./prepInput.py
