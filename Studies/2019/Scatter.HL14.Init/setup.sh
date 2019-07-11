@@ -36,3 +36,6 @@ ln -sfv $CDIR/prepInput.py                            prepInput.py
 
 ./madx-linux64-gnu makeOpticsHLLHC1.4-Offset.madx
 ./prepInput.py
+
+cp fc.3.aper              aperLimi.dat
+cp $CDIR/CollDB-HLLHC.dat CollDB-HLLHC.dat
